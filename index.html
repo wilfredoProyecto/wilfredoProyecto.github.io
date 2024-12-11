@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Christmas Shops</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script defer src="script.js"></script>
+</head>
+<body>
+    <a href="https://wa.me/1234567890" target="_blank" class="whatsapp-button">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+    </a>
+    
+
+    
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <img src="img/logo.png" alt="Logo de la empresa" />
+              </div>
+              
+            <input type="text" id="search-bar" placeholder="¿Qué buscas hoy?" oninput="filterProducts()">
+            <div class="user-options">
+                <!-- Carrito -->
+                <button id="cart-button" onclick="openCartModal()">
+                    <i class="fa-solid fa-cart-shopping" style="color: rgb(0, 0, 0); transform: scale(1.2);"></i>
+                    <span id="cart-count">1</span>
+                </button>
+                
+                <!-- Contáctenos -->
+                <button id="contact-button" onclick="openContactForm()">
+                    <i class="fa-solid fa-envelope"></i>
+                </button>
+        
+                <!-- Iniciar sesión -->
+                <button id="login-button" onclick="openLoginModal()">
+                    <i class="fa-solid fa-user"></i> <!-- Icono de usuario -->
+                </button>
+            </div>
+        </div>
+        
+        <!-- Modal de inicio de sesión -->
+        <div id="login-modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeLoginModal()">&times;</span>
+                <h2>Iniciar sesión</h2>
+                <form id="login-form">
+                    <label for="username">Nombre:</label>
+                    <input type="text" id="username" name="username" required placeholder="Tu nombre"><br>
+                    
+                    <label for="email">Correo electrónico:</label>
+                    <input type="email" id="email" name="email" required placeholder="Tu correo electrónico"><br>
+                    
+                    <button type="submit" id="submit-login">Enviar</button>
+                </form>
+            </div>
+        </div>
+    </header>
+
+    <!-- Slider -->
+    <div class="slider-container">
+        <div class="slider">
+            <div class="slide active">
+                <img src="img/slider1.jpg" alt="Slide 1">
+            </div>
+            <div class="slide">
+                <img src="img/slider2.jpg" alt="Slide 2">
+            </div>
+            <div class="slide">
+                <img src="image3.jpg" alt="Slide 3">
+            </div>
+        </div>
+        
+    </div>
+
+    <!-- Contenedor para el formulario de contacto (inicialmente oculto) -->
+    <div id="contact-form-container" class="contact-form-container" style="display:none;">
+        <div class="contact-form">
+            <h2>Contactenos</h2>
+            <ul class="contact-list">
+                <li><i class="fas fa-check-circle"></i> Av. Jorge Chávez s/n, Distrito de La Joya</li>
+                <li><a href="mailto:cuentaw616@gmail.com"><i class="fas fa-envelope"></i> cuentaw616@gmail.com</a></li>
+                <li><a href="tel:+351964254241"><i class="fas fa-mobile-alt"></i> 943 849 002</a></li>
+            </ul>
+            <form method="post" name="contact-form" novalidate="">
+                <div>
+                    <label for="name">Nombre</label>
+                    <input type="text" name="name" id="name" placeholder="Nombre" required>
+                </div>
+                <div>
+                    <label for="email">Correo Electrónico</label>
+                    <input type="email" name="email" id="email" placeholder="Correo Electrónico" required>
+                </div>
+                <div>
+                    <label for="message">Mensaje</label>
+                    <textarea name="message" id="message" placeholder="Mensaje" rows="4" required></textarea>
+                </div>
+                <div>
+                    <input type="checkbox" name="terms" id="terms" required>
+                    <label for="terms">Confirmo que he leído y acepto los <a href="#">Términos de uso</a></label>
+                </div>
+                <div>
+                    <input type="checkbox" name="privacy" id="privacy" required>
+                    <label for="privacy">Confirmo que he leído y acepto la <a href="#">Política de Privacidad</a></label>
+                </div>
+                <button type="submit">Enviar</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="content">
+        <aside>
+            <h3>Decoración Navideña</h3>
+            <div class="filters">
+                <h4>Sub-Categoría</h4>
+                <label><input type="checkbox" name="subcategory" value="luces" onchange="filterProducts()"> Luces</label><br>
+                <label><input type="checkbox" name="subcategory" value="adornos" onchange="filterProducts()"> Adornos</label><br>
+                <label><input type="checkbox" name="subcategory" value="árboles" onchange="filterProducts()"> Árboles</label>
+            </div>
+            <div class="filters">
+                <h4>Marca</h4>
+                <label><input type="checkbox" name="brand" value="krea" onchange="filterProducts()"> Krea</label><br>
+                <label><input type="checkbox" name="brand" value="otra" onchange="filterProducts()"> Otra</label>
+            </div>
+            <div class="filters">
+                <h4>Rango de precio</h4>
+                <input type="range" id="price-range" min="1" max="200" value="100" oninput="updatePriceValue(this.value); filterProducts()">
+                <p>Hasta: S/ <span id="price-value">100</span></p>
+            </div>
+        </aside>
+
+        <main>
+            <div class="controls">
+                <label for="sort-by">Ordenar por:</label>
+                <select id="sort-by" onchange="sortProducts(this.value)">
+                    <option value="relevance">Relevancia</option>
+                    <option value="bestselling">Más vendido</option>
+                    <option value="lowestprice">Menor precio</option>
+                    <option value="highestprice">Mayor precio</option>
+                    <option value="alphabetical">A-Z</option>
+                </select>
+            </div>
+            
+            
+            <div class="product-list">
+                <!-- Los productos se cargarán aquí dinámicamente -->
+                <p id="no-results" style="display:none; color: red;">No se encontraron productos que coincidan con los filtros.</p>
+            </div>
+        </main>
+    </div>
+    <section class="store-reviews">
+        <h4>Reseñas Generales:</h4>
+        <div class="reviews-container">
+            <!-- Reseña 1 -->
+            <div class="review">
+                <div class="review-header">
+                    <img src="img/cliente1.jpg" alt="Cliente 1" class="review-author-img">
+                    <div class="review-author-details">
+                        <span class="review-author"><strong>Cliente Satisfecho</strong></span>
+                        <div class="review-stars">
+                            ★★★★★
+                        </div>
+                    </div>
+                </div>
+                <p class="review-comment">Me encanta comprar en esta tienda, tienen una gran variedad de productos navideños a precios muy accesibles. Los productos siempre llegan en excelente estado y el servicio de atención al cliente es muy eficiente. ¡Recomiendo totalmente!</p>
+            </div>
+            
+            <!-- Reseña 2 -->
+            <div class="review">
+                <div class="review-header">
+                    <img src="img/cliente2.jpg" alt="Cliente 2" class="review-author-img">
+                    <div class="review-author-details">
+                        <span class="review-author"><strong>Laura García</strong></span>
+                        <div class="review-stars">
+                            ★★★★☆
+                        </div>
+                    </div>
+                </div>
+                <p class="review-comment">La experiencia de compra fue bastante buena, el producto llegó a tiempo y es tal como se describe. Un pequeño detalle es que esperaba un poco más de calidad en el embalaje.</p>
+            </div>
+            
+            <!-- Reseña 3 -->
+            <div class="review">
+                <div class="review-header">
+                    <img src="img/cliente3.jpg" alt="Cliente 3" class="review-author-img">
+                    <div class="review-author-details">
+                        <span class="review-author"><strong>Juan Pérez</strong></span>
+                        <div class="review-stars">
+                            ★★★★☆
+                        </div>
+                    </div>
+                </div>
+                <p class="review-comment">Gran tienda con buenos precios y variedad de productos navideños. El único inconveniente fue que el producto no llegó completamente intacto, pero el servicio de atención resolvió el problema rápidamente.</p>
+            </div>
+            
+            <!-- Reseña 4 -->
+            <div class="review">
+                <div class="review-header">
+                    <img src="img/cliente4.jpg" alt="Cliente 4" class="review-author-img">
+                    <div class="review-author-details">
+                        <span class="review-author"><strong>Ana Torres</strong></span>
+                        <div class="review-stars">
+                            ★★★★★
+                        </div>
+                    </div>
+                </div>
+                <p class="review-comment">¡Todo perfecto! Me llegó muy rápido y los productos son de excelente calidad. He vuelto a comprar varias veces y seguiré haciéndolo.</p>
+            </div>
+    
+            <!-- Nueva Reseña 5 -->
+            <div class="review">
+                <div class="review-header">
+                    <img src="img/cliente5.jpg" alt="Cliente 5" class="review-author-img">
+                    <div class="review-author-details">
+                        <span class="review-author"><strong>José Martínez</strong></span>
+                        <div class="review-stars">
+                            ★★★☆☆
+                        </div>
+                    </div>
+                </div>
+                <p class="review-comment">El precio está bien, pero la calidad de algunos productos podría mejorar. No obstante, la atención al cliente fue muy buena y me ayudaron con el inconveniente que tuve.</p>
+            </div>
+    
+            <!-- Nueva Reseña 6 (añadida) -->
+            <div class="review">
+                <div class="review-header">
+                    <img src="img/cliente6.jpg" alt="Cliente 6" class="review-author-img">
+                    <div class="review-author-details">
+                        <span class="review-author"><strong>María López</strong></span>
+                        <div class="review-stars">
+                            ★★★★★
+                        </div>
+                    </div>
+                </div>
+                <p class="review-comment">Excelente tienda. Los productos que compré llegaron muy rápido y con una calidad impresionante. Sin duda seguiré comprando en el futuro. ¡Recomiendo al 100%!</p>
+            </div>
+            <div class="review">
+                <div class="review-header">
+                    <img src="img/cliente7.jpg" alt="Persona 3" class="review-author-img">
+                    <div class="review-author-details">
+                        <span class="review-author"><strong>Marcos García</strong></span>
+                        <div class="review-stars">
+                            ★★★★★
+                        </div>
+                    </div>
+                </div>
+                <p class="review-comment">¡Un 10 para esta tienda! Me ayudaron con todas mis dudas y los productos son hermosos. Volveré a comprar aquí seguro. ¡Gracias por hacer mi Navidad aún más especial!</p>
+            </div>
+                
+        </div>
+    </section>
+    <section class="custom-section">
+        <div class="flex mt0 mb0 pt6 pb6 justify-start items-stretch w-100">
+            
+            <!-- Opción 1: Retiro en tienda -->
+            <div class="flex-item" style="width: 25%;">
+                <a target="_self" href="" class="custom-link">
+                    <div class="custom-link-container">
+                        <div class="flex-row">
+                            <i class="fas fa-store-alt icon"></i>
+                        </div>
+                        <div class="custom-text">
+                            <p>Retira en nuestras tiendas <span class="highlight-text">¡Gratis!</span></p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+    
+            <!-- Opción 2: Contacto por WhatsApp -->
+            <div class="flex-item" style="width: 25%;">
+                <a target="_self" href="https://wa.me/1234567890" class="custom-link">
+                    <div class="custom-link-container">
+                        <div class="flex-row">
+                            <i class="fab fa-whatsapp icon"></i>
+                        </div>
+                        <div class="custom-text">
+                            <p>Escríbenos al <span class="highlight-text">Whatsapp</span> si necesitas ayuda</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+    
+            <!-- Opción 3: Políticas de devolución -->
+            <div class="flex-item" style="width: 25%;">
+                <a target="_self" href="/politicas-devolucion" class="custom-link">
+                    <div class="custom-link-container">
+                        <div class="flex-row">
+                            <i class="fas fa-exchange-alt icon"></i>
+                        </div>
+                        <div class="custom-text">
+                            <p>Solicita tus <span class="highlight-text">cambios</span> y <span class="highlight-text">devoluciones</span></p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+    
+            <!-- Opción 4: Zonas de despacho -->
+            <div class="flex-item" style="width: 25%;">
+                <a target="_self" href="/zonas-de-despacho" class="custom-link">
+                    <div class="custom-link-container">
+                        <div class="flex-row">
+                            <i class="fas fa-truck-moving icon"></i>
+                        </div>
+                        <div class="custom-text">
+                            <p>Conoce nuestras <span class="highlight-text">zonas de despacho</span></p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+    
+        </div>
+    </section>
+    
+    <!-- Font Awesome para los iconos -->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    
+    
+    <footer>
+        <div class="footer-container">
+            <div class="footer-left">
+                <h3>Christmas Shop</h3>
+                <p>¡Bienvenido a la tienda donde encuentras todo para hacer tu navidad más especial! Encuentra artículos de decoración, adornos y mucho más.</p>
+                <p>© 2024 Christmas Shop. Todos los derechos reservados.</p>
+            </div>
+            
+            <div class="footer-middle">
+                <h4>Enlaces útiles</h4>
+                <ul>
+                    <li><a href="#">Inicio</a></li>
+                    <li><a href="#">Productos</a></li>
+                    <li><a href="#">Ofertas</a></li>
+                    <li><a href="#">Contacto</a></li>
+                    <li><a href="#">Preguntas Frecuentes</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-right">
+                <h4>Contacto</h4>
+                <p><strong>Teléfono:</strong> 943849002</p>
+                <p><strong>Email:</strong> <a href="mailto:cuentaw616@gmail.com">cuentaw616@gmail.com</a></p>
+                
+                <div class="social-media">
+                    <h4>Síguenos</h4>
+                    <a href="https://facebook.com" target="_blank" class="social-icon fab fa-facebook"></a>
+                    <a href="https://instagram.com" target="_blank" class="social-icon fab fa-instagram"></a>
+                    <a href="https://twitter.com" target="_blank" class="social-icon fab fa-twitter"></a>
+                    <a href="https://pinterest.com" target="_blank" class="social-icon fab fa-pinterest"></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+
+    <!-- Modal del carrito -->
+    <div id="cart-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span id="close-cart-modal" class="close" onclick="closeCartModal()">&times;</span>
+            <h2>Carrito de Compras</h2>
+            <div id="cart-items">
+                <!-- Aquí se agregan los productos del carrito dinámicamente -->
+            </div>
+            <p>Total: S/ <span id="cart-total-amount">0.00</span></p>
+            <button type="button" onclick="comprar()">Comprar</button>
+        </div>
+    </div>
+
+    <!-- Modal de pago -->
+    <div id="payment-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span id="close-payment-modal" class="close" onclick="closePaymentModal()">&times;</span>
+            <h2>Selecciona tu método de pago</h2>
+            
+            <button type="button" onclick="showCashPayment()">Pagar en Efectivo</button>
+            <button type="button" onclick="showCardPayment()">Pagar con Tarjeta de Crédito</button>
+            
+            <!-- Información para pago en efectivo -->
+            <div id="cash-payment-info" style="display:none;">
+                <h3>Pago en Efectivo</h3>
+                <p>Para pagar en efectivo, por favor ingresa tu dirección y número de celular para coordinar el pago en uno de nuestros puntos de pago o tiendas.</p>
+                <form>
+                    <label for="address">Dirección:</label>
+                    <input type="text" id="address" name="address" placeholder="Tu dirección" required><br>
+
+                    <label for="phone">Número de Celular:</label>
+                    <input type="text" id="phone" name="phone" placeholder="Tu número de celular" required><br>
+
+                    <button type="submit">Confirmar pago en efectivo</button>
+                </form>
+                
+            </div>
+            
+            
+            <!-- Información para pago con tarjeta -->
+            <div id="card-payment-info" style="display:none;">
+                <h3>Pagar con Tarjeta de Crédito</h3>
+                <p>Selecciona tu tarjeta de crédito y completa los detalles a continuación:</p>
+                
+                <!-- Tarjetas populares -->
+                <div class="credit-card-logos">
+                    <img src="img/visa.png" alt="Visa" class="card-logo">
+                    <img src="img/mastercard.jpg" alt="MasterCard" class="card-logo">
+                    <img src="img/amex.png" alt="American Express" class="card-logo">
+                    <img src="img/discover.png" alt="Discover" class="card-logo">
+                     <!-- Nueva tarjeta -->
+                </div>
+                
+
+                <!-- Formulario de tarjeta -->
+                <form>
+                    <label for="card-number">Número de tarjeta:</label>
+                    <input type="text" id="card-number" name="card-number" placeholder="Número de tarjeta" required><br>
+                    
+                    <label for="expiry-date">Fecha de vencimiento:</label>
+                    <input type="text" id="expiry-date" name="expiry-date" placeholder="MM/AA" required><br>
+                    
+                    <label for="cvv">CVV:</label>
+                    <input type="text" id="cvv" name="cvv" placeholder="CVV" required><br>
+                    
+                    <button type="submit">Confirmar pago</button>
+                </form>
+            </div>
+            
+            
+        </div>
+    </div>
+</body>
+</html>
